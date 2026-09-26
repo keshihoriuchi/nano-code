@@ -18,6 +18,13 @@ async function editFileExecute(args: {
     throw new Error(`アクセス拒否: ${args.path} はワークスペース外です`);
   }
 
+  // ステップ2.5: シンボリックリンクを解決した実パスがワークスペース内かチェック
+  const realRoot = await fs.realpath(WORKSPACE_ROOT);
+  const realPath = await fs.realpath(absolutePath);
+  if (!realPath.startsWith(realRoot + path.sep) && realPath !== realRoot) {
+    throw new Error(`アクセス拒否: ${args.path} はワークスペース外です`);
+  }
+
   // ステップ3: ファイルを読み込む
   const content = await fs.readFile(absolutePath, "utf-8");
 
