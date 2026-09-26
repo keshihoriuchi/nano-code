@@ -1,10 +1,11 @@
 {
-  "name": "/nano-code",
+  "name": "nano-code",
   "module": "index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.70.0"
   },
   "peerDependencies": {
     "typescript": "^5"

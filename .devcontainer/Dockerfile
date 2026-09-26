@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Node.js（LTS）をインストール
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+ && apt-get install -y --no-install-recommends nodejs \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # 非rootユーザーを作成（ベースイメージの bun ユーザー(UID 1000)をリネームし、ホストのUIDと一致させる）
 RUN groupmod -n vscode bun \
  && usermod -l vscode -d /home/vscode -m -s /bin/bash bun
