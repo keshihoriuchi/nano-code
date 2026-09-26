@@ -1,0 +1,20 @@
+node_modules
+
+# 環境変数
+.env
+.env.*
+!.env.example
+
+# ビルド成果物
+dist/
+build/
+
+# エディタ設定
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
