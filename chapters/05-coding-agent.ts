@@ -7,7 +7,7 @@ import { createGoogle } from "../src/providers/google";
 
 // モデルインスタンスを作成
 const google = createGoogle();
-const model = google("gemma-3.5-flash-lite");
+const model = google("gemini-3.5-flash-lite");
 export const codingAgent = new Agent({
   name: "nano-code",
   instructions: "あなたはコーディングエージェントです。慎重に作業してください。",
