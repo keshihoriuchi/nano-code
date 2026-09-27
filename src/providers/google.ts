@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, type Part } from "@google/genai";
 import type {
   GenerateParams,
   GenerateTextResult,
@@ -40,13 +40,14 @@ export function createGoogle(config?: {
         }
         // assistantのツール呼び出し
         if (m.role === "assistant" && m.toolCalls) {
-          const parts: any[] = [];
+          const parts: Part[] = [];
           if (m.content) {
             parts.push({ text: m.content });
           }
           for (const tc of m.toolCalls) {
             parts.push({
               functionCall: { name: tc.name, args: tc.args },
+              ...(tc.thoughtSignature && { thoughtSignature: tc.thoughtSignature }),
             });
           }
           return { role: "model" as const, parts };
@@ -108,15 +109,16 @@ export function createGoogle(config?: {
         const candidate = response.candidates?.[0];
         const parts = candidate?.content?.parts ?? [];
         // partsからテキストとfunctionCallを抽出
-        const textParts = parts.filter((p: any) => p.text);
-        const text = textParts.map((p: any) => p.text).join("");
-        const functionCallParts = parts.filter((p: any) => p.functionCall);
+        const textParts = parts.filter((p: Part) => p.text);
+        const text = textParts.map((p: Part) => p.text).join("");
+        const functionCallParts = parts.filter((p: Part) => p.functionCall);
         const toolCalls: ToolCall[] | undefined =
           functionCallParts.length > 0
-            ? functionCallParts.map((p: any, i: number) => ({
+            ? functionCallParts.map((p: Part, i: number) => ({
                 toolCallId: `call_${i}`, // Gemini APIはIDを返さないため生成
-                name: p.functionCall.name,
-                args: p.functionCall.args,
+                name: p.functionCall!.name!,
+                args: p.functionCall!.args!,
+                thoughtSignature: p.thoughtSignature,
               }))
             : undefined;
         return {

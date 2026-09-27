@@ -11,6 +11,7 @@ export type ToolCall = {
   toolCallId: string;
   name: string;
   args: Record<string, unknown>;
+  thoughtSignature?: string; // Gemini: 履歴に戻す際に必要
 };
 
 // ツール実行結果の型（会話履歴に追加する）

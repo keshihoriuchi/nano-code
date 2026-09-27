@@ -1,6 +1,7 @@
 // src/tools/writeFile.ts
 import * as fs from "fs/promises";
 import * as path from "path";
+import type { Tool } from "../types";
 
 const WORKSPACE_ROOT = path.resolve(process.cwd(), "./workspace");
 
@@ -39,7 +40,10 @@ async function writeFileExecute(args: { path: string; content: string }): Promis
   await fs.mkdir(WORKSPACE_ROOT, { recursive: true });
   const realRoot = await fs.realpath(WORKSPACE_ROOT);
   const realTarget = await resolveExistingRealPath(absolutePath);
-  if (realTarget === null || (!realTarget.startsWith(realRoot + path.sep) && realTarget !== realRoot)) {
+  if (
+    realTarget === null ||
+    (!realTarget.startsWith(realRoot + path.sep) && realTarget !== realRoot)
+  ) {
     throw new Error(`アクセス拒否: ${args.path} はワークスペース外です`);
   }
 
@@ -52,7 +56,7 @@ async function writeFileExecute(args: { path: string; content: string }): Promis
   return `ファイルを書き込みました: ${args.path}`;
 }
 
-export const writeFile = {
+export const writeFile: Tool = {
   name: "writeFile",
   description:
     "指定されたパスにファイルを作成または上書きする。ディレクトリが存在しない場合は自動的に作成される。",
@@ -70,5 +74,5 @@ export const writeFile = {
     },
     required: ["path", "content"],
   },
-  execute: writeFileExecute,
+  execute: writeFileExecute as (args: Record<string, unknown>) => Promise<string>,
 };

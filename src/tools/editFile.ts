@@ -1,6 +1,7 @@
 // src/tools/editFile.ts
 import * as fs from "fs/promises";
 import * as path from "path";
+import type { Tool } from "../types";
 
 const WORKSPACE_ROOT = path.resolve(process.cwd(), "./workspace");
 
@@ -49,7 +50,7 @@ async function editFileExecute(args: {
   )}...`;
 }
 
-export const editFile = {
+export const editFile: Tool = {
   name: "editFile",
   description:
     "ファイルの一部を編集する。oldTextで指定した箇所をnewTextに置き換える。oldTextが複数見つかる場合はエラーを返すため、一意に特定できる範囲を指定すること。ファイル全体を読み書きするよりトークン消費が少ない。",
@@ -71,5 +72,5 @@ export const editFile = {
     },
     required: ["path", "oldText", "newText"],
   },
-  execute: editFileExecute,
+  execute: editFileExecute as (args: Record<string, unknown>) => Promise<string>,
 };

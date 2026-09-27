@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import * as path from "path";
+import type { Tool } from "../types";
 
 // ワークスペースのルートディレクトリ
 const WORKSPACE_ROOT = path.resolve(process.cwd(), "./workspace");
@@ -145,7 +146,7 @@ async function execCommandExecute(args: { command: string }): Promise<string> {
 }
 
 // ツール定義
-export const execCommand = {
+export const execCommand: Tool = {
   name: "execCommand",
   description:
     "ワークスペース内で許可された汎用コマンドを実行する。利用可能：bun test、ls、cat、grep、find、pwd、mkdir。",
@@ -156,5 +157,5 @@ export const execCommand = {
     },
     required: ["command"],
   },
-  execute: execCommandExecute,
+  execute: execCommandExecute as (args: Record<string, unknown>) => Promise<string>,
 };

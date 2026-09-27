@@ -1,6 +1,7 @@
 // src/tools/readFile.ts
 import * as fs from "fs/promises";
 import * as path from "path";
+import type { Tool } from "../types";
 
 // ワークスペースのルートディレクトリを定義
 const WORKSPACE_ROOT = path.resolve(process.cwd(), "./workspace");
@@ -49,7 +50,7 @@ async function readFileExecute(args: { path: string }): Promise<string> {
   return content;
 }
 
-export const readFile = {
+export const readFile: Tool = {
   name: "readFile",
   description:
     "ワークスペース内の指定されたパスのファイル内容を文字列として読み込む。ファイルが存在しない場合はエラーを返す。100KBを超える巨大ファイルは読み込めない（コンテキストウィンドウ保護のため）。相対パスまたは絶対パスを指定できる。",
@@ -63,5 +64,5 @@ export const readFile = {
     },
     required: ["path"],
   },
-  execute: readFileExecute, // 上で実装した関数を紐付ける
+  execute: readFileExecute as (args: Record<string, unknown>) => Promise<string>, // 上で実装した関数を紐付ける
 };
