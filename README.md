@@ -1,4 +1,4 @@
-# /nano-code
+# nano-code
 
 To install dependencies:
 

@@ -2,8 +2,9 @@
 # 非rootユーザー / 権限制限 / プロジェクトディレクトリのみ
 FROM oven/bun:1.3
 
-# 必須ツールのみ（git、curl、sudo）
+# 必須ツールのみ（git、curl、sudo、ps用のprocps）
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps \
     git \
     curl \
     ca-certificates \

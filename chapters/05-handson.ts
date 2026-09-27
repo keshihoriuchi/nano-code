@@ -5,12 +5,20 @@ import { readFile } from "../src/tools/readFile";
 import { writeFile } from "../src/tools/writeFile";
 import type { Message, Tool } from "../src/types";
 
+const MAX_STEPS = 20; // 最大ステップ数
+
 const tools = [readFile, writeFile];
 const google = createGoogle();
 const model = google("gemini-3.5-flash");
 
+// 5.4節のexecuteToolを拡張（エラーハンドリング追加）
 async function executeTool(tool: Tool, args: any): Promise<string> {
-  return await tool.execute(args);
+  try {
+    return await tool.execute(args);
+  } catch (error) {
+    // 例外をキャッチし、エラーメッセージを返す（例外をスローしない）
+    return `エラー: ${(error as Error).message}`;
+  }
 }
 
 async function generate(userMessage: string): Promise<string> {
@@ -19,8 +27,11 @@ async function generate(userMessage: string): Promise<string> {
     { role: "user", content: userMessage },
   ];
 
+  let stepCount = 0;
   let finalText = "";
-  while (true) {
+  while (stepCount < MAX_STEPS) {
+    stepCount++;
+
     // ステップ1: LLMを呼び出す
     const response = await generateText({ model, messages, tools });
     if (response.text) {
@@ -79,7 +90,12 @@ async function generate(userMessage: string): Promise<string> {
       break;
     }
   }
+
+  if (stepCount >= MAX_STEPS) {
+    console.warn("警告: 最大ステップ数に達しました");
+  }
+
   return finalText;
 }
 
-generate('README.mdのタイトルを大文字にして');
+generate("README.mdのタイトルを大文字にして");
