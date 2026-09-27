@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Node.js（LTS）をインストール
+# Node.js（LTS）をインストール (oxcのLanguage Server起動に必要)
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
  && apt-get install -y --no-install-recommends nodejs \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
