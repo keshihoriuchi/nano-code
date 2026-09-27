@@ -64,5 +64,6 @@ export const readFile: Tool = {
     },
     required: ["path"],
   },
+  needsApproval: false,
   execute: readFileExecute as (args: Record<string, unknown>) => Promise<string>, // 上で実装した関数を紐付ける
 };

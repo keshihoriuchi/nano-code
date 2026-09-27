@@ -74,5 +74,6 @@ export const writeFile: Tool = {
     },
     required: ["path", "content"],
   },
+  needsApproval: true,
   execute: writeFileExecute as (args: Record<string, unknown>) => Promise<string>,
 };

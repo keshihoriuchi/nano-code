@@ -72,5 +72,6 @@ export const editFile: Tool = {
     },
     required: ["path", "oldText", "newText"],
   },
+  needsApproval: true,
   execute: editFileExecute as (args: Record<string, unknown>) => Promise<string>,
 };

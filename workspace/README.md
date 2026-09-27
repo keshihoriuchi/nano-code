@@ -1,3 +1,3 @@
-# Workspace
+# WORKSPACE
 
 sample project

@@ -157,5 +157,6 @@ export const execCommand: Tool = {
     },
     required: ["command"],
   },
+  needsApproval: true,
   execute: execCommandExecute as (args: Record<string, unknown>) => Promise<string>,
 };
