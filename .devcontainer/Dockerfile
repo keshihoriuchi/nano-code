@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     sudo \
+    bubblewrap \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Node.js（LTS）をインストール (oxcのLanguage Server起動に必要)

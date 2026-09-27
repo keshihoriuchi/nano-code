@@ -10,6 +10,7 @@ import { createBranch, commit, pushBranch } from "../src/tools/git";
 import { createPullRequest, createIssueComment } from "../src/tools/github";
 import { parseArgs } from "util";
 import { existsSync, mkdirSync } from "fs";
+import { config } from "../src/config";
 
 const WORKSPACE_ROOT = path.resolve(process.cwd(), "workspace");
 
@@ -24,9 +25,17 @@ async function main() {
     args: process.argv.slice(2),
     options: {
       yolo: { type: "boolean", default: false },
+      sandbox: { type: "boolean", default: false },
+      "allowed-domains": { type: "string" },
     },
     allowPositionals: true,
   });
+
+  // configに反映
+  config.sandbox = values["sandbox"] ?? false;
+  if (values["allowed-domains"]) {
+    config.allowedDomains.push(...values["allowed-domains"].split(","));
+  }
   const yoloMode = values["yolo"];
 
   // --- 入力の取得 (第7章 GitHub Actions 連携用のIssue駆動対応) ---
@@ -56,7 +65,6 @@ async function main() {
     mkdirSync(WORKSPACE_ROOT, { recursive: true });
   }
 
-  
   // console.log("=== Nano Code Agent ===\n");
   // console.log(`Provider: ${provider || "(未設定)"}`);
   // console.log(`Model: ${modelName || "(未設定)"}`);
@@ -114,7 +122,9 @@ ${issueText}
       writeFile,
       editFile,
       execCommand,
-      createBranch, commit, pushBranch,
+      createBranch,
+      commit,
+      pushBranch,
     },
     maxSteps: 20,
     // --yolo時は自動承認
